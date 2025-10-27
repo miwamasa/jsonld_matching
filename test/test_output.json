@@ -1,0 +1,43 @@
+{
+  "@context": {
+    "batt": "https://example.org/vocab/battery#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "label": "http://www.w3.org/2000/01/rdf-schema#label"
+  },
+  "@id": "urn:doc:local:bat-001",
+  "@type": "batt:Battery",
+  "label": "AA Rechargeable Battery XYZ-123",
+  "batt:normalization": {
+    "appliedMatches": 0,
+    "totalCandidates": 8,
+    "threshold": 0.75,
+    "mappingEvidence": [],
+    "timestamp": "2025-10-27T20:41:39.925Z"
+  },
+  "batt:energyWh": {
+    "@value": 2.4,
+    "@type": "xsd:decimal"
+  },
+  "batt:derivation": {
+    "properties": [
+      {
+        "property": "energyWh",
+        "formula": "Wh = (mAh / 1000) * V",
+        "inputs": {
+          "capacity_mAh": 2000,
+          "nominalVoltage_V": 1.2
+        },
+        "steps": [
+          "Input: capacity = 2000 mAh, voltage = 1.2 V",
+          "Convert capacity: 2000 mAh ÷ 1000 = 2 Ah",
+          "Compute energy: 2 Ah × 1.2 V = 2.4 Wh"
+        ],
+        "confidence": 0.85,
+        "unit": "Wh"
+      }
+    ],
+    "mappingEvidence": [],
+    "timestamp": "2025-10-27T20:41:39.925Z",
+    "method": "rule-based-calculation"
+  }
+}

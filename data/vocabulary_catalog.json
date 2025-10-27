@@ -1,0 +1,102 @@
+{
+  "vocabularies": [
+    {
+      "id": "https://example.org/vocab/battery#capacity",
+      "label": "capacity",
+      "description": "Electric charge capacity expressed in milliampere-hours (integer), typical for cells such as AA/AAA rechargeable batteries.",
+      "datatype": "integer",
+      "units": ["mAh", "Ah"],
+      "examples": [2000, 2500, 3000],
+      "category": "electrical"
+    },
+    {
+      "id": "https://example.org/vocab/battery#nominalVoltage",
+      "label": "nominalVoltage",
+      "description": "Nominal voltage of the battery in volts (decimal). e.g., 1.2 for NiMH cells.",
+      "datatype": "decimal",
+      "units": ["V", "volt"],
+      "examples": [1.2, 1.5, 3.7],
+      "category": "electrical"
+    },
+    {
+      "id": "https://example.org/vocab/battery#chemistry",
+      "label": "chemistry",
+      "description": "Battery chemistry type, such as NiMH, Li-ion, Alkaline, describing electrochemical family.",
+      "datatype": "string",
+      "units": [],
+      "examples": ["NiMH", "Li-ion", "Alkaline", "NiCd"],
+      "category": "material"
+    },
+    {
+      "id": "https://example.org/vocab/battery#size",
+      "label": "size",
+      "description": "Physical size designation such as AA, AAA, 18650, describing standard form factors.",
+      "datatype": "string",
+      "units": [],
+      "examples": ["AA", "AAA", "18650", "CR2032"],
+      "category": "physical"
+    },
+    {
+      "id": "https://example.org/vocab/battery#manufacturer",
+      "label": "manufacturer",
+      "description": "Name of the battery manufacturer or brand producing the cell.",
+      "datatype": "string",
+      "units": [],
+      "examples": ["Panasonic", "Sony", "Energizer", "Duracell"],
+      "category": "commercial"
+    },
+    {
+      "id": "https://example.org/vocab/battery#weight",
+      "label": "weight",
+      "description": "Weight of the battery in grams, representing the mass of the complete cell.",
+      "datatype": "decimal",
+      "units": ["g", "kg", "oz"],
+      "examples": [25, 30, 45],
+      "category": "physical"
+    },
+    {
+      "id": "https://example.org/vocab/battery#energyWh",
+      "label": "energyWh",
+      "description": "Energy capacity in watt-hours (Wh), calculated from capacity and voltage.",
+      "datatype": "decimal",
+      "units": ["Wh", "kWh"],
+      "examples": [2.4, 3.0, 10.0],
+      "category": "electrical",
+      "derived": true,
+      "derivationFormula": "Wh = (mAh / 1000) * V"
+    },
+    {
+      "id": "https://example.org/vocab/battery#rechargeable",
+      "label": "rechargeable",
+      "description": "Boolean indicating whether the battery can be recharged.",
+      "datatype": "boolean",
+      "units": [],
+      "examples": [true, false],
+      "category": "functional"
+    },
+    {
+      "id": "https://example.org/vocab/battery#cycleLife",
+      "label": "cycleLife",
+      "description": "Number of charge-discharge cycles the battery can sustain before degradation.",
+      "datatype": "integer",
+      "units": ["cycles"],
+      "examples": [500, 1000, 2000],
+      "category": "performance"
+    },
+    {
+      "id": "https://example.org/vocab/battery#temperature",
+      "label": "operatingTemperature",
+      "description": "Operating temperature range in Celsius for safe battery operation.",
+      "datatype": "range",
+      "units": ["C", "F"],
+      "examples": ["-20 to 60", "0 to 45"],
+      "category": "environmental"
+    }
+  ],
+  "version": "2025-10-27",
+  "metadata": {
+    "domain": "battery",
+    "maintainer": "example.org",
+    "license": "CC0-1.0"
+  }
+}

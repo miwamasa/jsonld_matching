@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON-LD Matching System</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+
+    header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    header p {
+      font-size: 1.1em;
+      opacity: 0.9;
+    }
+
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      padding: 30px;
+    }
+
+    .panel {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 20px;
+      border: 1px solid #dee2e6;
+    }
+
+    .panel h2 {
+      color: #495057;
+      margin-bottom: 15px;
+      font-size: 1.5em;
+      border-bottom: 2px solid #667eea;
+      padding-bottom: 10px;
+    }
+
+    .input-section {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      color: #495057;
+      margin-bottom: 8px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 300px;
+      padding: 12px;
+      border: 2px solid #dee2e6;
+      border-radius: 6px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      resize: vertical;
+      transition: border-color 0.3s;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #5a6268;
+    }
+
+    .btn-small {
+      padding: 8px 16px;
+      font-size: 12px;
+    }
+
+    .results-section {
+      margin-top: 20px;
+    }
+
+    .match-card {
+      background: white;
+      border: 1px solid #dee2e6;
+      border-radius: 6px;
+      padding: 15px;
+      margin-bottom: 15px;
+      transition: all 0.3s;
+    }
+
+    .match-card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .match-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .match-label {
+      font-size: 1.2em;
+      font-weight: 600;
+      color: #495057;
+    }
+
+    .match-score {
+      font-size: 1.3em;
+      font-weight: 700;
+      padding: 5px 15px;
+      border-radius: 20px;
+      color: white;
+    }
+
+    .score-high {
+      background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    }
+
+    .score-medium {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    .score-low {
+      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    }
+
+    .match-details {
+      font-size: 0.9em;
+      color: #6c757d;
+      margin-bottom: 10px;
+    }
+
+    .reasons {
+      margin-top: 10px;
+    }
+
+    .reason-tag {
+      display: inline-block;
+      background: #e9ecef;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.85em;
+      margin: 3px;
+      color: #495057;
+    }
+
+    .reason-tag.lexical {
+      background: #d1ecf1;
+      color: #0c5460;
+    }
+
+    .reason-tag.semantic {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .reason-tag.instance {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .reason-tag.datatype {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .code-block {
+      background: #282c34;
+      color: #abb2bf;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    .full-width {
+      grid-column: 1 / -1;
+    }
+
+    .error {
+      background: #f8d7da;
+      color: #721c24;
+      padding: 15px;
+      border-radius: 6px;
+      border: 1px solid #f5c6cb;
+      margin-bottom: 15px;
+    }
+
+    .success {
+      background: #d4edda;
+      color: #155724;
+      padding: 15px;
+      border-radius: 6px;
+      border: 1px solid #c3e6cb;
+      margin-bottom: 15px;
+    }
+
+    .info-box {
+      background: #d1ecf1;
+      color: #0c5460;
+      padding: 15px;
+      border-radius: 6px;
+      border: 1px solid #bee5eb;
+      margin-bottom: 15px;
+      font-size: 0.95em;
+    }
+
+    .threshold-control {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+      padding: 15px;
+      background: white;
+      border-radius: 6px;
+    }
+
+    .threshold-control input[type="range"] {
+      flex: 1;
+      height: 6px;
+    }
+
+    .threshold-value {
+      font-weight: 700;
+      color: #667eea;
+      font-size: 1.2em;
+      min-width: 50px;
+      text-align: center;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 15px;
+      border-radius: 6px;
+      text-align: center;
+      border: 1px solid #dee2e6;
+    }
+
+    .stat-value {
+      font-size: 2em;
+      font-weight: 700;
+      color: #667eea;
+    }
+
+    .stat-label {
+      font-size: 0.9em;
+      color: #6c757d;
+      margin-top: 5px;
+    }
+
+    @media (max-width: 768px) {
+      .main-content {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>JSON-LD Matching System</h1>
+      <p>description ベースの語彙マッチング・正規化・派生計算システム</p>
+    </header>
+
+    <div class="main-content">
+      <!-- Input Panel -->
+      <div class="panel">
+        <h2>入力ドキュメント</h2>
+
+        <div class="button-group">
+          <button class="btn-small btn-secondary" onclick="loadSample(1)">サンプル1 (AA NiMH)</button>
+          <button class="btn-small btn-secondary" onclick="loadSample(2)">サンプル2 (18650 Li-ion)</button>
+          <button class="btn-small btn-secondary" onclick="loadSample(3)">サンプル3 (AAA Alkaline)</button>
+        </div>
+
+        <div class="input-section">
+          <label for="documentInput">JSON-LD ドキュメント</label>
+          <textarea id="documentInput" placeholder='{"@context": [{"description": "..."}], ...}'></textarea>
+        </div>
+
+        <div class="threshold-control">
+          <label>マッチング閾値:</label>
+          <input type="range" id="thresholdSlider" min="0" max="100" value="75" oninput="updateThreshold()">
+          <span class="threshold-value" id="thresholdValue">0.75</span>
+        </div>
+
+        <div class="button-group">
+          <button class="btn-primary" onclick="runMatching()">マッチング実行</button>
+          <button class="btn-secondary" onclick="clearAll()">クリア</button>
+        </div>
+      </div>
+
+      <!-- Results Panel -->
+      <div class="panel">
+        <h2>マッチング結果</h2>
+        <div id="matchingResults">
+          <div class="info-box">
+            左側でドキュメントを入力またはサンプルを選択し、「マッチング実行」ボタンをクリックしてください。
+          </div>
+        </div>
+      </div>
+
+      <!-- Normalized Output -->
+      <div class="panel full-width">
+        <h2>正規化された JSON-LD</h2>
+        <div id="normalizedOutput">
+          <div class="info-box">
+            マッチング実行後、正規化されたJSON-LDが表示されます。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load JavaScript modules -->
+  <script src="src/matching_engine.js"></script>
+  <script src="src/normalizer.js"></script>
+  <script src="src/derivation.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>
