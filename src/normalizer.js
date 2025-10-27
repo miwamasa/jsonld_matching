@@ -13,11 +13,11 @@ class Normalizer {
 
   /**
    * Normalize document using matched vocabularies
-   * @param {Object} document - Original document
+   * @param {Object} doc - Original document
    * @param {Array} matches - Matched vocabularies with scores
    * @param {number} threshold - Minimum score to accept match (default 0.75)
    */
-  normalize(document, matches, threshold = 0.75) {
+  normalize(doc, matches, threshold = 0.75) {
     const acceptedMatches = matches.filter(m => m.score >= threshold);
 
     // Build context
@@ -30,13 +30,13 @@ class Normalizer {
     // Build normalized document
     const normalized = {
       "@context": context,
-      "@id": document["@id"] || "urn:doc:unknown",
+      "@id": doc["@id"] || "urn:doc:unknown",
       "@type": "batt:Battery"
     };
 
     // Add label if present
-    if (document.label) {
-      normalized.label = document.label;
+    if (doc.label) {
+      normalized.label = doc.label;
     }
 
     // Map properties using accepted matches
@@ -47,7 +47,7 @@ class Normalizer {
       if (!vocab) continue;
 
       // Find corresponding value in document
-      const value = document[match.label];
+      const value = doc[match.label];
       if (value === undefined) continue;
 
       // Convert and add property
@@ -56,8 +56,8 @@ class Normalizer {
 
       // Check for unit field
       const unitKey = `${match.label}Unit`;
-      if (document[unitKey]) {
-        normalized[`batt:${match.label}Unit`] = document[unitKey];
+      if (doc[unitKey]) {
+        normalized[`batt:${match.label}Unit`] = doc[unitKey];
       }
 
       // Record evidence
@@ -152,7 +152,7 @@ class Normalizer {
   /**
    * Normalize units in document to standard units
    */
-  normalizeUnits(normalized, document) {
+  normalizeUnits(normalized, doc) {
     const standardUnits = {
       capacity: 'Ah',
       nominalVoltage: 'V',
