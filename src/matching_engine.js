@@ -78,7 +78,7 @@ class MatchingEngine {
     const E = this.computeTextSimilarity(docDescription, vocab.description);
 
     // 2. Rule-based score (R)
-    const R = this.computeRuleScore(vocab, sampleValues, document);
+    const R = this.computeRuleScore(vocab, sampleValues, doc);
 
     // 3. Mock LLM score with reasons (L)
     const llmResult = this.computeLLMScore(vocab, docDescription, sampleValues);
