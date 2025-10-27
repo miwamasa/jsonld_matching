@@ -12,16 +12,16 @@ class MatchingEngine {
   /**
    * Main matching function: takes document and returns scored candidates
    */
-  matchDocument(document) {
-    const docDescription = this.extractDescription(document);
-    const sampleValues = this.extractSampleValues(document);
+  matchDocument(doc) {
+    const docDescription = this.extractDescription(doc);
+    const sampleValues = this.extractSampleValues(doc);
 
     if (!docDescription) {
       return { error: "No description found in @context" };
     }
 
     const candidates = this.vocabularies.map(vocab => {
-      return this.scoreCandidate(vocab, docDescription, sampleValues, document);
+      return this.scoreCandidate(vocab, docDescription, sampleValues, doc);
     });
 
     // Sort by final score descending
@@ -42,12 +42,12 @@ class MatchingEngine {
   /**
    * Extract description from @context
    */
-  extractDescription(document) {
-    if (!document["@context"]) return null;
+  extractDescription(doc) {
+    if (!doc["@context"]) return null;
 
-    const contexts = Array.isArray(document["@context"])
-      ? document["@context"]
-      : [document["@context"]];
+    const contexts = Array.isArray(doc["@context"])
+      ? doc["@context"]
+      : [doc["@context"]];
 
     for (const ctx of contexts) {
       if (ctx.description) {
@@ -60,9 +60,9 @@ class MatchingEngine {
   /**
    * Extract sample values from document
    */
-  extractSampleValues(document) {
+  extractSampleValues(doc) {
     const values = {};
-    for (const [key, value] of Object.entries(document)) {
+    for (const [key, value] of Object.entries(doc)) {
       if (!key.startsWith('@') && typeof value !== 'object') {
         values[key] = value;
       }
@@ -73,12 +73,12 @@ class MatchingEngine {
   /**
    * Score a single candidate vocabulary against document
    */
-  scoreCandidate(vocab, docDescription, sampleValues, document) {
+  scoreCandidate(vocab, docDescription, sampleValues, doc) {
     // 1. Text similarity score (E - embedding approximation)
     const E = this.computeTextSimilarity(docDescription, vocab.description);
 
     // 2. Rule-based score (R)
-    const R = this.computeRuleScore(vocab, sampleValues, document);
+    const R = this.computeRuleScore(vocab, sampleValues, doc);
 
     // 3. Mock LLM score with reasons (L)
     const llmResult = this.computeLLMScore(vocab, docDescription, sampleValues);
@@ -142,11 +142,11 @@ class MatchingEngine {
   /**
    * Compute rule-based score
    */
-  computeRuleScore(vocab, sampleValues, document) {
+  computeRuleScore(vocab, sampleValues, doc) {
     let score = 0;
 
     // Check if label appears in document values
-    const labelInDoc = Object.keys(document).some(key =>
+    const labelInDoc = Object.keys(doc).some(key =>
       key.toLowerCase().includes(vocab.label.toLowerCase())
     );
     if (labelInDoc) score += 0.4;

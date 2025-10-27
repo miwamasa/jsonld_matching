@@ -111,10 +111,10 @@ function runMatching() {
       return;
     }
 
-    const document = JSON.parse(input);
+    const inputDoc = JSON.parse(input);
 
     // Run matching
-    const matchResult = matchingEngine.matchDocument(document);
+    const matchResult = matchingEngine.matchDocument(inputDoc);
 
     if (matchResult.error) {
       showError(matchResult.error);
@@ -126,7 +126,7 @@ function runMatching() {
 
     // Run normalization
     const normalized = normalizer.normalize(
-      document,
+      inputDoc,
       matchResult.matches,
       currentThreshold
     );
@@ -135,7 +135,7 @@ function runMatching() {
     const mappingEvidence = normalized["batt:normalization"]?.mappingEvidence || [];
     const withDerivations = derivationEngine.applyDerivations(
       normalized,
-      document,
+      inputDoc,
       mappingEvidence
     );
 

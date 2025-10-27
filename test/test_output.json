@@ -12,7 +12,7 @@
     "totalCandidates": 8,
     "threshold": 0.75,
     "mappingEvidence": [],
-    "timestamp": "2025-10-27T20:41:39.925Z"
+    "timestamp": "2025-10-27T20:49:21.039Z"
   },
   "batt:energyWh": {
     "@value": 2.4,
@@ -37,7 +37,7 @@
       }
     ],
     "mappingEvidence": [],
-    "timestamp": "2025-10-27T20:41:39.925Z",
+    "timestamp": "2025-10-27T20:49:21.040Z",
     "method": "rule-based-calculation"
   }
 }

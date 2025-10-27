@@ -12,12 +12,12 @@ class DerivationEngine {
   /**
    * Apply all applicable derivations to normalized document
    */
-  applyDerivations(normalized, originalDocument, matchingEvidence) {
+  applyDerivations(normalized, originalDoc, matchingEvidence) {
     const derivedProperties = [];
 
     // Try each derivation
     for (const [propName, deriveFn] of Object.entries(this.derivations)) {
-      const result = deriveFn(normalized, originalDocument);
+      const result = deriveFn(normalized, originalDoc);
       if (result.success) {
         // Add derived property
         normalized[`batt:${propName}`] = result.value;
@@ -51,7 +51,7 @@ class DerivationEngine {
    * Derive energy in Wh from capacity (mAh) and voltage (V)
    * Formula: Wh = (mAh / 1000) * V
    */
-  deriveEnergyWh(normalized, originalDocument) {
+  deriveEnergyWh(normalized, originalDoc) {
     // Extract capacity and voltage
     let capacityMah = null;
     let voltageV = null;
@@ -71,16 +71,16 @@ class DerivationEngine {
     }
 
     // Fallback to original document
-    if (capacityMah === null && originalDocument.capacity) {
-      capacityMah = originalDocument.capacity;
-      const unit = originalDocument.capacityUnit || "mAh";
+    if (capacityMah === null && originalDoc.capacity) {
+      capacityMah = originalDoc.capacity;
+      const unit = originalDoc.capacityUnit || "mAh";
       if (unit === "Ah") {
         capacityMah = capacityMah * 1000;
       }
     }
 
-    if (voltageV === null && originalDocument.nominalVoltage) {
-      voltageV = originalDocument.nominalVoltage;
+    if (voltageV === null && originalDoc.nominalVoltage) {
+      voltageV = originalDoc.nominalVoltage;
     }
 
     // Check if we have required values
@@ -146,7 +146,7 @@ class DerivationEngine {
    * Derive power rating (W) if current (A) and voltage (V) are available
    * Formula: W = A * V
    */
-  derivePowerW(normalized, originalDocument) {
+  derivePowerW(normalized, originalDoc) {
     let currentA = null;
     let voltageV = null;
 
@@ -158,11 +158,11 @@ class DerivationEngine {
     }
 
     // Fallback to original
-    if (currentA === null && originalDocument.current) {
-      currentA = originalDocument.current;
+    if (currentA === null && originalDoc.current) {
+      currentA = originalDoc.current;
     }
-    if (voltageV === null && originalDocument.nominalVoltage) {
-      voltageV = originalDocument.nominalVoltage;
+    if (voltageV === null && originalDoc.nominalVoltage) {
+      voltageV = originalDoc.nominalVoltage;
     }
 
     if (currentA === null || voltageV === null) {

@@ -17,7 +17,7 @@ const vocabularyCatalog = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
 
 // Load sample document
 const docPath = path.join(__dirname, '../data/sample_document_1.json');
-const sampleDocument = JSON.parse(fs.readFileSync(docPath, 'utf8'));
+const sampleDoc = JSON.parse(fs.readFileSync(docPath, 'utf8'));
 
 console.log('=== JSON-LD Matching System Test ===\n');
 
@@ -27,7 +27,7 @@ const normalizer = new Normalizer(vocabularyCatalog);
 const derivationEngine = new DerivationEngine();
 
 console.log('1. Testing Matching Engine...');
-const matchResult = matchingEngine.matchDocument(sampleDocument);
+const matchResult = matchingEngine.matchDocument(sampleDoc);
 console.log(`   Found ${matchResult.matches.length} candidates`);
 console.log(`   Top 3 matches:`);
 matchResult.matches.slice(0, 3).forEach((match, i) => {
@@ -35,13 +35,13 @@ matchResult.matches.slice(0, 3).forEach((match, i) => {
 });
 
 console.log('\n2. Testing Normalizer...');
-const normalized = normalizer.normalize(sampleDocument, matchResult.matches, 0.75);
+const normalized = normalizer.normalize(sampleDoc, matchResult.matches, 0.75);
 console.log(`   Applied ${normalized["batt:normalization"].appliedMatches} matches`);
 console.log(`   Properties: ${Object.keys(normalized).filter(k => k.startsWith('batt:')).join(', ')}`);
 
 console.log('\n3. Testing Derivation Engine...');
 const mappingEvidence = normalized["batt:normalization"]?.mappingEvidence || [];
-const withDerivations = derivationEngine.applyDerivations(normalized, sampleDocument, mappingEvidence);
+const withDerivations = derivationEngine.applyDerivations(normalized, sampleDoc, mappingEvidence);
 
 if (withDerivations["batt:derivation"]) {
   const derivation = withDerivations["batt:derivation"];
