@@ -1,0 +1,15 @@
+{
+  "@context": [
+    {
+      "note": "Battery context described in free text for ML matching",
+      "description": "A rechargeable cylindrical battery (AA size) with capacity in mAh, nominal voltage, chemistry (e.g., NiMH), and manufacturer reference."
+    }
+  ],
+  "@id": "urn:doc:local:bat-001",
+  "@type": "BatteryDocument",
+  "label": "AA Rechargeable Battery XYZ-123",
+  "capacity": 2000,
+  "capacityUnit": "mAh",
+  "nominalVoltage": 1.2,
+  "chemistry": "NiMH"
+}

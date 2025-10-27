@@ -1,0 +1,15 @@
+{
+  "@context": [
+    {
+      "description": "Non-rechargeable alkaline battery (AAA size) with voltage 1.5V. Manufacturer is Duracell. Suitable for low-drain devices."
+    }
+  ],
+  "@id": "urn:doc:local:bat-003",
+  "@type": "BatteryDocument",
+  "label": "Duracell AAA Alkaline",
+  "nominalVoltage": 1.5,
+  "chemistry": "Alkaline",
+  "size": "AAA",
+  "manufacturer": "Duracell",
+  "rechargeable": false
+}

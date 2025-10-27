@@ -1,0 +1,16 @@
+{
+  "@context": [
+    {
+      "description": "Lithium-ion rechargeable cell with 18650 form factor. Has high capacity around 3000-3500 mAh and nominal voltage of 3.7V. Suitable for high-drain applications."
+    }
+  ],
+  "@id": "urn:doc:local:bat-002",
+  "@type": "BatteryDocument",
+  "label": "18650 Li-ion Cell",
+  "capacity": 3500,
+  "capacityUnit": "mAh",
+  "nominalVoltage": 3.7,
+  "chemistry": "Li-ion",
+  "size": "18650",
+  "rechargeable": true
+}
